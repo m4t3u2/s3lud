@@ -1,12 +1,28 @@
 version: '3.3'
 
 services:
-  s3lud:
+  s3lud1:
     image: 's3lud:1.0'
-    container_name: 's3lud'
+    container_name: 's3lud1'
     environment:
       - 'SPRING_CONFIG_LOCATION=file:/usr/app/application.properties'
     volumes:
       - './volumes/application.properties:/usr/app/application.properties'
     ports:
     - '8080:8080'
+    networks:
+      - 's3lud-network'
+  s3lud2:
+    image: 's3lud:1.0'
+    container_name: 's3lud2'
+    environment:
+      - 'SPRING_CONFIG_LOCATION=file:/usr/app/application.properties'
+    volumes:
+      - './volumes/application.properties:/usr/app/application.properties'
+    ports:
+      - '8081:8080'
+    networks:
+      - 's3lud-network'
+networks:
+  s3lud-network:
+    name: 's3lud-network'
