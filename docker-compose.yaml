@@ -7,9 +7,7 @@ services:
     environment:
       - 'SPRING_CONFIG_LOCATION=file:/usr/app/application.properties'
     volumes:
-      - './volumes/application.properties:/usr/app/application.properties'
-    ports:
-    - '8080:8080'
+      - './volumes/s3lud/application.properties:/usr/app/application.properties'
     networks:
       - 's3lud-network'
   s3lud2:
@@ -18,11 +16,23 @@ services:
     environment:
       - 'SPRING_CONFIG_LOCATION=file:/usr/app/application.properties'
     volumes:
-      - './volumes/application.properties:/usr/app/application.properties'
-    ports:
-      - '8081:8080'
+      - './volumes/s3lud/application.properties:/usr/app/application.properties'
     networks:
       - 's3lud-network'
+  nginx:
+    image: 'nginx:1.23.0'
+    container_name: 'nginx'
+    environment:
+      - 'NGINX_PORT=8080'
+    volumes:
+      - './volumes/nginx/templates:/etc/nginx/templates'
+    ports:
+      - '8080:8080'
+    networks:
+      - 's3lud-network'
+    depends_on:
+      - 's3lud1'
+      - 's3lud2'
 networks:
   s3lud-network:
     name: 's3lud-network'
