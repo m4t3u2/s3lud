@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,12 +31,12 @@ public class FileResource {
 		this.bucketService = bucketService;
 	}
 
-	@GetMapping("/{name}")
-	public ResponseEntity<Resource> findByName(@PathVariable String name) {
-		InputStream file = bucketService.findByName(name);
+	@GetMapping("/{fileName}")
+	public ResponseEntity<Resource> findByName(@PathVariable String fileName) {
+		InputStream file = bucketService.findByName(fileName);
 		Resource resource = new InputStreamResource(file);
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + name + "\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
 
@@ -48,6 +49,12 @@ public class FileResource {
 	@GetMapping
 	public ResponseEntity<List<String>> findAll() {
 		return ResponseEntity.ok(bucketService.findAll());
+	}
+	
+	@DeleteMapping("/{fileName}")
+	public ResponseEntity<Void> delete(@PathVariable String fileName) {
+		bucketService.delete(fileName);
+		return ResponseEntity.ok().build();
 	}
 
 }

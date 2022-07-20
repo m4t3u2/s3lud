@@ -12,5 +12,7 @@ public interface BucketService {
 	public void save(MultipartFile multipartFile);
 
 	public List<String> findAll();
+	
+	public void delete(String fileName);
 
 }

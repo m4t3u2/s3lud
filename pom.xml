@@ -13,7 +13,7 @@
 	<artifactId>s3lud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Amazon S3 LUD</name>
-	<description>Amazon S3 List Upload Dowload with Load Balancer</description>
+	<description>Amazon S3 List Upload Download and Delete files with Load Balancer.</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

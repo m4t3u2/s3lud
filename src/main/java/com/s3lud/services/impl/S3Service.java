@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
@@ -71,6 +72,7 @@ public class S3Service implements BucketService {
 
 	@Override
 	public List<String> findAll() {
+		LOG.info("Listing all files");
 		ObjectListing listObjects = amazonS3.listObjects(s3BucketName);
 		List<S3ObjectSummary> sumaries = listObjects.getObjectSummaries();
 		while(listObjects.isTruncated()) {
@@ -78,6 +80,14 @@ public class S3Service implements BucketService {
 			sumaries.addAll(listObjects.getObjectSummaries());
 		}
 		return sumaries.stream().map(s -> s.getKey()).collect(Collectors.toList());
+	}
+
+	@Override
+	public void delete(String fileName) {
+		LOG.info("Deleting file with name {}", fileName);
+		DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(s3BucketName, fileName);
+		amazonS3.deleteObject(deleteObjectRequest);
+		LOG.info("File deleted successfully");
 	}
 
 }
